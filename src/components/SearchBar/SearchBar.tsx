@@ -1,0 +1,42 @@
+import { Formik, Form, Field } from 'formik';
+import toast from 'react-hot-toast';
+import css from './SearchBar.module.css';
+
+interface FormValues{
+  query: string;
+}
+interface Props {
+  onSubmit: (value: string) => void;
+}
+
+const initialValues:FormValues = { query: '' };
+
+const SearchBar: React.FC<Props> = ({ onSubmit }) => {
+  return (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values, actions) => {
+        if (!values.query) {
+          toast.error('Please enter the value in the search field');
+          return;
+        }
+        onSubmit(values.query);
+        actions.resetForm();
+      }}
+    >
+      <Form className={css.searchForm}>
+        <Field
+          className={css.searchInput}
+          name="query"
+          type="search"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+        <button type="submit" className={css.searchFormButton}>Search</button>
+      </Form>
+    </Formik>
+  );
+};
+
+export default SearchBar;
